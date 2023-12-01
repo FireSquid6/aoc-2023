@@ -22,6 +22,7 @@ func Solution() {
 	for scanner.Scan() {
 		line := scanner.Text()
 		nums := []int{}
+		// use a map
 
 		for _, c := range line {
 			n, err := strconv.Atoi(string(c))
