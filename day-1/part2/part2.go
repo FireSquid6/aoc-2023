@@ -1,4 +1,4 @@
-package main
+package part2
 
 import (
 	"bufio"
@@ -8,7 +8,7 @@ import (
 	"strconv"
 )
 
-func main() {
+func Solution() {
 	file, err := os.Open("./input.txt")
 
 	if err != nil {

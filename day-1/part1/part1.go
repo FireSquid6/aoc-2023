@@ -9,7 +9,7 @@ import (
 )
 
 func Solution() {
-	file, err := os.Open("./part-1/input.txt")
+	file, err := os.Open("./part1/input.txt")
 
 	if err != nil {
 		log.Fatal(err)
@@ -30,9 +30,6 @@ func Solution() {
 				nums = append(nums, n)
 			}
 		}
-		fmt.Println(nums)
-		fmt.Println(nums[0] + nums[len(nums)-1])
-
 		answer += (10 * nums[0]) + nums[len(nums)-1]
 	}
 
