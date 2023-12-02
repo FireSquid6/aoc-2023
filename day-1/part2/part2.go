@@ -10,20 +10,8 @@ import (
 )
 
 func Solution() {
-	numberStrings := map[string]int{
-		"one":   1,
-		"two":   2,
-		"three": 3,
-		"four":  4,
-		"five":  5,
-		"six":   6,
-		"seven": 7,
-		"eight": 8,
-		"nine":  9,
-		"zero":  0,
-	}
 
-	file, err := os.Open("input.txt")
+	file, err := os.Open("./input.txt")
 
 	if err != nil {
 		log.Fatal(err)
@@ -35,32 +23,7 @@ func Solution() {
 
 	for scanner.Scan() {
 		line := scanner.Text()
-		nums := map[int]int{}
-
-		// find all of the digits
-		for i, c := range line {
-
-			n, err := strconv.Atoi(string(c))
-
-			if err == nil {
-				nums[i] = n
-			}
-		}
-
-		// find all of the words
-		for word := range numberStrings {
-			i := strings.Index(line, word)
-			n := strings.Count(line, word)
-
-			// need to find the index of every occurence of the word
-			if n > 1 {
-				fmt.Println(n)
-			}
-
-			if i != -1 {
-				nums[i] = numberStrings[word]
-			}
-		}
+		nums := GetNumbers(line)
 
 		keys := make([]int, 0, len(nums))
 		for k := range nums {
@@ -79,7 +42,7 @@ func Solution() {
 		answer += value
 	}
 
-	fmt.Println("\nThe final answer is:")
+	fmt.Println("\nThe final answer for part 2 is:")
 	fmt.Println(answer)
 }
 
@@ -100,4 +63,51 @@ func minMax(arr []int) (int, int) {
 	}
 
 	return max, min
+}
+
+func GetNumbers(line string) map[int]int {
+	numberStrings := map[string]int{
+		"one":   1,
+		"two":   2,
+		"three": 3,
+		"four":  4,
+		"five":  5,
+		"six":   6,
+		"seven": 7,
+		"eight": 8,
+		"nine":  9,
+		"zero":  0,
+	}
+
+	nums := map[int]int{}
+
+	// find all of the digits
+	for i, c := range line {
+
+		n, err := strconv.Atoi(string(c))
+
+		if err == nil {
+			nums[i] = n
+		}
+	}
+
+	// find all of the words
+	for word := range numberStrings {
+		num := numberStrings[word]
+		str := line
+
+		replacement := "!"
+		for i := 0; i < len(word)-1; i++ {
+			replacement += "_"
+		}
+
+		str = strings.ReplaceAll(str, word, replacement)
+		for char := range str {
+			if string(str[char]) == "!" {
+				nums[char] = num
+			}
+		}
+	}
+
+	return nums
 }
