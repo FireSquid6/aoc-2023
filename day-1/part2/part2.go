@@ -6,10 +6,24 @@ import (
 	"log"
 	"os"
 	"strconv"
+	"strings"
 )
 
 func Solution() {
-	file, err := os.Open("./input.txt")
+	numberStrings := map[string]int{
+		"one":   1,
+		"two":   2,
+		"three": 3,
+		"four":  4,
+		"five":  5,
+		"six":   6,
+		"seven": 7,
+		"eight": 8,
+		"nine":  9,
+		"zero":  0,
+	}
+
+	file, err := os.Open("input.txt")
 
 	if err != nil {
 		log.Fatal(err)
@@ -21,22 +35,69 @@ func Solution() {
 
 	for scanner.Scan() {
 		line := scanner.Text()
-		nums := []int{}
-		// use a map
+		nums := map[int]int{}
 
-		for _, c := range line {
+		// find all of the digits
+		for i, c := range line {
+
 			n, err := strconv.Atoi(string(c))
 
 			if err == nil {
-				nums = append(nums, n)
+				nums[i] = n
 			}
 		}
-		fmt.Println(nums)
-		fmt.Println(nums[0] + nums[len(nums)-1])
 
-		answer += (10 * nums[0]) + nums[len(nums)-1]
+		// find all of the words
+		for word := range numberStrings {
+			i := strings.Index(line, word)
+			n := strings.Count(line, word)
+
+			// need to find the index of every occurence of the word
+			if n > 1 {
+				fmt.Println(n)
+			}
+
+			if i != -1 {
+				nums[i] = numberStrings[word]
+			}
+		}
+
+		keys := make([]int, 0, len(nums))
+		for k := range nums {
+			keys = append(keys, k)
+		}
+
+		minIndex, maxIndex := minMax(keys)
+
+		value := (10 * nums[maxIndex]) + nums[minIndex]
+
+		// fmt.Println(line)
+		// fmt.Println(nums)
+		// fmt.Println(value)
+		// fmt.Println()
+
+		answer += value
 	}
 
 	fmt.Println("\nThe final answer is:")
 	fmt.Println(answer)
+}
+
+func minMax(arr []int) (int, int) {
+	// Initialize the variables to hold the maximum and minimum values to draw comparisons.
+	max := arr[0]
+	min := arr[0]
+	// Iterate over the array
+	for i := 0; i < len(arr); i++ {
+		// if the current element is greater than the present maximum
+		if arr[i] > max {
+			max = arr[i]
+		}
+		// if the current element is smaller than the present minimum
+		if arr[i] < min {
+			min = arr[i]
+		}
+	}
+
+	return max, min
 }
